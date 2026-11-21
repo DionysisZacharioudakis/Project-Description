@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t
+        t-name="project_description_from_tasks.ProjectTaskControlPanel"
+        t-inherit="project.ProjectTaskControlPanel"
+        t-inherit-mode="extension"
+    >
+        <xpath expr="//Dropdown[button/i[contains(@class, 'fa-sliders')]]" position="before">
+            <button
+                t-if="hasCurrentProject"
+                type="button"
+                class="btn btn-secondary me-1"
+                title="View or edit the project description"
+                t-on-click="onOpenProjectDescription"
+            >
+                <i class="fa fa-file-text-o"/>
+                <span class="d-none d-md-inline ms-1">Project Description</span>
+            </button>
+        </xpath>
+    </t>
+</templates>
+
