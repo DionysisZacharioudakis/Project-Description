@@ -25,7 +25,8 @@ Menu** from the sliders menu if it is hidden. In that same menu, select
 **Project Description** to show or hide its top-menu button. You can drag the
 visible top-menu buttons to arrange them in your preferred order; Odoo saves
 the visibility and order for your user. Select **Project Description** to open
-the inline editor, then use **Save** or **Discard**.
+the inline editor. After making a change, use the cloud **Save** or × **Discard**
+controls beside the project breadcrumb, just like an Odoo form view.
 
 The button is intentionally hidden in global task views because those views can
 contain tasks from multiple projects.

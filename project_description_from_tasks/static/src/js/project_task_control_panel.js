@@ -27,6 +27,7 @@ patch(ProjectTaskControlPanel.prototype, {
             projectName: "",
             original: "",
             draft: "",
+            dirty: false,
             editorKey: 0,
         });
     },
@@ -102,6 +103,7 @@ patch(ProjectTaskControlPanel.prototype, {
                 projectName: project.name,
                 original: description,
                 draft: description,
+                dirty: false,
                 loaded: true,
                 editorKey: this.projectDescription.editorKey + 1,
             });
@@ -119,6 +121,9 @@ patch(ProjectTaskControlPanel.prototype, {
             allowImage: false,
             allowFile: false,
             allowVideo: false,
+            onChange: () => {
+                this.projectDescription.dirty = true;
+            },
             getRecordInfo: () => ({
                 resModel: "project.project",
                 resId: this.projectDescription.projectId,
@@ -159,6 +164,7 @@ patch(ProjectTaskControlPanel.prototype, {
             const savedDescription = project.description || "";
             this.projectDescription.original = savedDescription;
             this.projectDescription.draft = savedDescription;
+            this.projectDescription.dirty = false;
             this.projectDescription.editorKey++;
             this.notification.add(_t("Project description saved."), { type: "success" });
         } finally {
@@ -168,6 +174,7 @@ patch(ProjectTaskControlPanel.prototype, {
 
     discardProjectDescriptionChanges() {
         this.projectDescription.draft = this.projectDescription.original;
+        this.projectDescription.dirty = false;
         this.projectDescription.editorKey++;
     },
 });
