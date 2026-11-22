@@ -28,6 +28,11 @@ the visibility and order for your user. Select **Project Description** to open
 the inline editor. After making a change, use the cloud **Save** or × **Discard**
 controls beside the project breadcrumb, just like an Odoo form view.
 
+When selected from Dashboard or another embedded project screen, **Project
+Description** automatically opens the project's Tasks view and expands the
+editor. Saving is intentionally silent; the cloud icon returning to its hidden
+state confirms that the description was saved.
+
 The button is intentionally hidden in global task views because those views can
 contain tasks from multiple projects.
 

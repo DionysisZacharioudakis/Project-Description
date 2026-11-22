@@ -7,8 +7,9 @@
     >
         <xpath expr="//div[hasclass('o_embedded_actions')]//button[hasclass('o_draggable')]" position="attributes">
             <attribute name="t-att-class">{
-                'active': state.embeddedInfos.currentEmbeddedAction?.id === action.id
-                    || (isProjectDescriptionAction(action) &amp;&amp; projectDescription.open),
+                'active': isProjectDescriptionAction(action)
+                    ? projectDescription.open
+                    : state.embeddedInfos.currentEmbeddedAction?.id === action.id,
             }</attribute>
         </xpath>
         <xpath expr="//Breadcrumbs/t[@t-set-slot='breadcrumb-status-indicator']/t[@t-slot='control-panel-status-indicator']" position="after">

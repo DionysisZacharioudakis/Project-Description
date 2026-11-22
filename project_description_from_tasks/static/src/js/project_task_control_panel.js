@@ -3,7 +3,7 @@ import { useService } from "@web/core/utils/hooks";
 import { patch } from "@web/core/utils/patch";
 import { Wysiwyg } from "@html_editor/wysiwyg";
 import { ProjectTaskControlPanel } from "@project/views/project_task_control_panel/project_task_control_panel";
-import { markup, useState } from "@odoo/owl";
+import { markup, onMounted, useState } from "@odoo/owl";
 
 const PROJECT_DESCRIPTION_METHOD = "action_toggle_project_description_inline";
 
@@ -16,7 +16,6 @@ patch(ProjectTaskControlPanel.prototype, {
     setup() {
         super.setup(...arguments);
         this.orm = useService("orm");
-        this.notification = useService("notification");
         this.projectDescriptionEditor = null;
         this.projectDescription = useState({
             open: false,
@@ -29,6 +28,11 @@ patch(ProjectTaskControlPanel.prototype, {
             draft: "",
             dirty: false,
             editorKey: 0,
+        });
+        onMounted(() => {
+            if (this.env.searchModel.globalContext.open_project_description) {
+                this.toggleProjectDescription();
+            }
         });
     },
 
@@ -166,7 +170,6 @@ patch(ProjectTaskControlPanel.prototype, {
             this.projectDescription.draft = savedDescription;
             this.projectDescription.dirty = false;
             this.projectDescription.editorKey++;
-            this.notification.add(_t("Project description saved."), { type: "success" });
         } finally {
             this.projectDescription.saving = false;
         }
