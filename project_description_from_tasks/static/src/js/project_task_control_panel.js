@@ -5,6 +5,8 @@ import { patch } from "@web/core/utils/patch";
 import { ProjectTaskControlPanel } from "@project/views/project_task_control_panel/project_task_control_panel";
 import { markup, onMounted, onPatched, useRef, useState } from "@odoo/owl";
 
+const PROJECT_DESCRIPTION_METHOD = "action_toggle_project_description_inline";
+
 patch(ProjectTaskControlPanel.prototype, {
     setup() {
         super.setup(...arguments);
@@ -27,11 +29,35 @@ patch(ProjectTaskControlPanel.prototype, {
     },
 
     currentProjectId() {
-        return this.env.searchModel.globalContext.default_project_id || false;
+        const context = this.env.searchModel.globalContext;
+        return context.default_project_id || context.active_id || false;
     },
 
     hasCurrentProject() {
         return Boolean(this.currentProjectId());
+    },
+
+    isProjectDescriptionAction(action) {
+        return action?.python_method === PROJECT_DESCRIPTION_METHOD;
+    },
+
+    async onEmbeddedActionClick(action) {
+        if (this.isProjectDescriptionAction(action)) {
+            await this.toggleProjectDescription();
+            return;
+        }
+        return super.onEmbeddedActionClick(...arguments);
+    },
+
+    _setVisibility(actionId) {
+        const action = this.state.embeddedInfos.embeddedActions.find(
+            ({ id }) => id === actionId
+        );
+        const isVisible = this.state.embeddedInfos.visibleEmbeddedActions.includes(actionId);
+        super._setVisibility(...arguments);
+        if (isVisible && this.isProjectDescriptionAction(action)) {
+            this.closeProjectDescription();
+        }
     },
 
     async toggleProjectDescription() {
@@ -40,10 +66,7 @@ patch(ProjectTaskControlPanel.prototype, {
             return;
         }
         if (this.projectDescription.open) {
-            if (this.projectDescriptionEditor.el) {
-                this.projectDescription.draft = this.projectDescriptionEditor.el.innerHTML;
-            }
-            this.projectDescription.open = false;
+            this.closeProjectDescription();
             return;
         }
 
@@ -53,6 +76,13 @@ patch(ProjectTaskControlPanel.prototype, {
         } else {
             this.descriptionNeedsSync = true;
         }
+    },
+
+    closeProjectDescription() {
+        if (this.projectDescriptionEditor.el) {
+            this.projectDescription.draft = this.projectDescriptionEditor.el.innerHTML;
+        }
+        this.projectDescription.open = false;
     },
 
     async loadProjectDescription(projectId) {

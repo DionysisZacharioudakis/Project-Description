@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <record id="project_embedded_action_description" model="ir.embedded.actions">
+        <field name="name">Project Description</field>
+        <field name="sequence">120</field>
+        <field name="parent_action_id" ref="project.act_project_project_2_project_task_all"/>
+        <field name="parent_res_model">project.project</field>
+        <field name="python_method">action_toggle_project_description_inline</field>
+    </record>
+</odoo>

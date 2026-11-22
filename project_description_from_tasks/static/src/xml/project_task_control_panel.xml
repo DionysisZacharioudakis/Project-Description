@@ -5,18 +5,11 @@
         t-inherit="project.ProjectTaskControlPanel"
         t-inherit-mode="extension"
     >
-        <xpath expr="//div[hasclass('o_embedded_actions')]/t[@t-call='web.embeddedActionsDropdown']" position="before">
-            <button
-                t-if="hasCurrentProject()"
-                type="button"
-                class="btn btn-secondary"
-                t-att-class="{ active: projectDescription.open }"
-                title="View or edit the project description"
-                t-on-click="toggleProjectDescription"
-            >
-                <i class="fa fa-file-text-o"/>
-                <span class="ms-1">Project Description</span>
-            </button>
+        <xpath expr="//div[hasclass('o_embedded_actions')]//button[hasclass('o_draggable')]" position="attributes">
+            <attribute name="t-att-class">{
+                'active': state.embeddedInfos.currentEmbeddedAction?.id === action.id
+                    || (isProjectDescriptionAction(action) &amp;&amp; projectDescription.open),
+            }</attribute>
         </xpath>
         <xpath expr="//div[hasclass('o_control_panel_main')]" position="after">
             <section

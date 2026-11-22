@@ -1,12 +1,14 @@
 {
     "name": "Project Description from Tasks",
     "summary": "View and edit a project's description directly from its task views",
-    "version": "19.0.1.1.0",
+    "version": "19.0.1.2.0",
     "category": "Services/Project",
     "author": "Dionysis",
     "license": "LGPL-3",
     "depends": ["project", "web"],
-    "data": [],
+    "data": [
+        "data/project_description_embedded_action.xml",
+    ],
     "assets": {
         "web.assets_backend": [
             "project_description_from_tasks/static/src/js/project_task_control_panel.js",
