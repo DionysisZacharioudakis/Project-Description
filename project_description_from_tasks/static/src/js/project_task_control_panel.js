@@ -3,7 +3,7 @@ import { useService } from "@web/core/utils/hooks";
 import { patch } from "@web/core/utils/patch";
 import { Wysiwyg } from "@html_editor/wysiwyg";
 import { ProjectTaskControlPanel } from "@project/views/project_task_control_panel/project_task_control_panel";
-import { useState } from "@odoo/owl";
+import { markup, useState } from "@odoo/owl";
 
 const PROJECT_DESCRIPTION_METHOD = "action_toggle_project_description_inline";
 
@@ -112,11 +112,10 @@ patch(ProjectTaskControlPanel.prototype, {
 
     getProjectDescriptionEditorConfig() {
         return {
-            content: this.projectDescription.draft,
+            // The value comes from Odoo's sanitized project.project.description HTML field.
+            content: markup(this.projectDescription.draft),
             baseContainers: ["DIV", "P"],
-            placeholder: _t(
-                "Add the project's description, instructions, notes, or useful links here..."
-            ),
+            placeholder: _t('Type "/" for commands'),
             allowImage: false,
             allowFile: false,
             allowVideo: false,

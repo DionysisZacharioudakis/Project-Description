@@ -1,7 +1,7 @@
 {
     "name": "Project Description from Tasks",
     "summary": "View and edit a project's description directly from its task views",
-    "version": "19.0.1.3.0",
+    "version": "19.0.1.3.1",
     "category": "Services/Project",
     "author": "Dionysis",
     "license": "LGPL-3",
