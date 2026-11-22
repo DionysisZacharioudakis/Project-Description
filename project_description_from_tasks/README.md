@@ -1,11 +1,12 @@
 # Project Description from Tasks
 
-Odoo 19 add-on that adds a **Project Description** button to the control panel of
-the task views for a specific project.
+Odoo 19 add-on that adds **Project Description** to the task view's existing top
+menu for a specific project.
 
-The button opens a focused modal containing the project's existing HTML
-`description` field. Users can read or edit the value according to their normal
-Odoo access rights. No duplicate field or synchronized copy is created.
+The menu button expands a focused editor directly above the task view. Users can
+read or edit the project's existing HTML `description` field while the tasks
+remain visible. Access continues to follow the user's normal Odoo permissions,
+and no duplicate field or synchronized copy is created.
 
 ## Installation
 
@@ -19,8 +20,9 @@ Odoo access rights. No duplicate field or synchronized copy is created.
 ## Usage
 
 Open **Project > Projects**, enter a project, and open its tasks. Select
-**Project Description** in the top control bar. Edit the description and use
-the modal's standard **Save** or **Discard** action.
+enable **Top Menu** from the sliders menu if it is hidden, and select **Project
+Description** beside Tasks and Dashboard. Edit the description and select
+**Save** or **Discard**.
 
 The button is intentionally hidden in global task views because those views can
 contain tasks from multiple projects.
