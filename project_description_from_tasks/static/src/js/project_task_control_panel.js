@@ -119,6 +119,20 @@ patch(ProjectTaskControlPanel.prototype, {
             allowImage: false,
             allowFile: false,
             allowVideo: false,
+            getRecordInfo: () => ({
+                resModel: "project.project",
+                resId: this.projectDescription.projectId,
+                id: this.projectDescription.projectId,
+                data: {
+                    description: this.projectDescription.draft,
+                },
+                fields: {
+                    description: {
+                        name: "description",
+                        type: "html",
+                    },
+                },
+            }),
         };
     },
 
