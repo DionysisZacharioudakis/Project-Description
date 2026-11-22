@@ -33,14 +33,12 @@
                     <i class="fa fa-spinner fa-spin me-1"/> Loading description...
                 </div>
                 <t t-elif="projectDescription.loaded">
-                    <div
-                        t-ref="projectDescriptionEditor"
-                        class="o_project_description_editor form-control"
-                        contenteditable="true"
-                        role="textbox"
-                        aria-multiline="true"
-                        aria-label="Project Description"
-                        data-placeholder="Add the project's description, instructions, notes, or useful links here..."
+                    <Wysiwyg
+                        class="'o_project_description_wysiwyg'"
+                        contentClass="'o_project_description_editor'"
+                        config="getProjectDescriptionEditorConfig()"
+                        onLoad.bind="onProjectDescriptionEditorLoad"
+                        t-key="projectDescription.editorKey"
                     />
                     <div class="d-flex gap-2 mt-2">
                         <button

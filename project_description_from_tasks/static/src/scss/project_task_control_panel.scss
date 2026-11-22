@@ -1,11 +1,23 @@
 .o_project_description_inline {
     width: 100%;
 
+    .o_project_description_wysiwyg {
+        border: 1px solid var(--o-gray-400);
+        border-radius: var(--border-radius);
+        background: var(--o-view-background-color, #fff);
+
+        &:focus-within {
+            border-color: var(--o-brand-primary);
+        }
+    }
+
     .o_project_description_editor {
         min-height: 7rem;
         max-height: 18rem;
         overflow-y: auto;
+        padding: 0.75rem;
         line-height: 1.5;
+        outline: none;
 
         &:empty::before {
             color: var(--o-gray-500);

@@ -3,10 +3,11 @@
 Odoo 19 add-on that adds **Project Description** as a native embedded action in
 the task view's existing top menu for a specific project.
 
-The menu button expands a focused editor directly above the task view. Users can
-read or edit the project's existing HTML `description` field while the tasks
-remain visible. Access continues to follow the user's normal Odoo permissions,
-and no duplicate field or synchronized copy is created.
+The menu button expands Odoo's native rich-text editor directly above the task
+view. Users can format headings, lists, quotes, links, and text while the tasks
+remain visible. It edits the project's existing HTML `description` field;
+access continues to follow the user's normal Odoo permissions, and no duplicate
+field or synchronized copy is created.
 
 ## Installation
 

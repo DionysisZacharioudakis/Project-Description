@@ -1,11 +1,11 @@
 {
     "name": "Project Description from Tasks",
     "summary": "View and edit a project's description directly from its task views",
-    "version": "19.0.1.2.0",
+    "version": "19.0.1.3.0",
     "category": "Services/Project",
     "author": "Dionysis",
     "license": "LGPL-3",
-    "depends": ["project", "web"],
+    "depends": ["project", "web", "html_editor"],
     "data": [
         "data/project_description_embedded_action.xml",
     ],

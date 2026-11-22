@@ -1,18 +1,23 @@
 import { _t } from "@web/core/l10n/translation";
-import { setElementContent } from "@web/core/utils/html";
 import { useService } from "@web/core/utils/hooks";
 import { patch } from "@web/core/utils/patch";
+import { Wysiwyg } from "@html_editor/wysiwyg";
 import { ProjectTaskControlPanel } from "@project/views/project_task_control_panel/project_task_control_panel";
-import { markup, onMounted, onPatched, useRef, useState } from "@odoo/owl";
+import { useState } from "@odoo/owl";
 
 const PROJECT_DESCRIPTION_METHOD = "action_toggle_project_description_inline";
+
+ProjectTaskControlPanel.components = {
+    ...ProjectTaskControlPanel.components,
+    Wysiwyg,
+};
 
 patch(ProjectTaskControlPanel.prototype, {
     setup() {
         super.setup(...arguments);
         this.orm = useService("orm");
         this.notification = useService("notification");
-        this.projectDescriptionEditor = useRef("projectDescriptionEditor");
+        this.projectDescriptionEditor = null;
         this.projectDescription = useState({
             open: false,
             loading: false,
@@ -22,10 +27,8 @@ patch(ProjectTaskControlPanel.prototype, {
             projectName: "",
             original: "",
             draft: "",
+            editorKey: 0,
         });
-        this.descriptionNeedsSync = false;
-        onMounted(() => this.syncDescriptionEditor());
-        onPatched(() => this.syncDescriptionEditor());
     },
 
     currentProjectId() {
@@ -73,16 +76,15 @@ patch(ProjectTaskControlPanel.prototype, {
         this.projectDescription.open = true;
         if (this.projectDescription.projectId !== projectId) {
             await this.loadProjectDescription(projectId);
-        } else {
-            this.descriptionNeedsSync = true;
         }
     },
 
     closeProjectDescription() {
-        if (this.projectDescriptionEditor.el) {
-            this.projectDescription.draft = this.projectDescriptionEditor.el.innerHTML;
+        if (this.projectDescriptionEditor) {
+            this.projectDescription.draft = this.projectDescriptionEditor.getContent();
         }
         this.projectDescription.open = false;
+        this.projectDescriptionEditor = null;
     },
 
     async loadProjectDescription(projectId) {
@@ -101,31 +103,36 @@ patch(ProjectTaskControlPanel.prototype, {
                 original: description,
                 draft: description,
                 loaded: true,
+                editorKey: this.projectDescription.editorKey + 1,
             });
-            this.descriptionNeedsSync = true;
         } finally {
             this.projectDescription.loading = false;
         }
     },
 
-    syncDescriptionEditor() {
-        if (!this.descriptionNeedsSync || !this.projectDescriptionEditor.el) {
-            return;
-        }
-        // project.project.description is an Odoo-sanitized HTML field.
-        setElementContent(
-            this.projectDescriptionEditor.el,
-            markup(this.projectDescription.draft)
-        );
-        this.descriptionNeedsSync = false;
+    getProjectDescriptionEditorConfig() {
+        return {
+            content: this.projectDescription.draft,
+            baseContainers: ["DIV", "P"],
+            placeholder: _t(
+                "Add the project's description, instructions, notes, or useful links here..."
+            ),
+            allowImage: false,
+            allowFile: false,
+            allowVideo: false,
+        };
+    },
+
+    onProjectDescriptionEditorLoad(editor) {
+        this.projectDescriptionEditor = editor;
     },
 
     async saveProjectDescription() {
-        const editor = this.projectDescriptionEditor.el;
+        const editor = this.projectDescriptionEditor;
         if (!editor || !this.projectDescription.projectId) {
             return;
         }
-        const description = editor.innerHTML;
+        const description = editor.getContent();
         this.projectDescription.saving = true;
         try {
             await this.orm.write("project.project", [this.projectDescription.projectId], {
@@ -139,7 +146,7 @@ patch(ProjectTaskControlPanel.prototype, {
             const savedDescription = project.description || "";
             this.projectDescription.original = savedDescription;
             this.projectDescription.draft = savedDescription;
-            this.descriptionNeedsSync = true;
+            this.projectDescription.editorKey++;
             this.notification.add(_t("Project description saved."), { type: "success" });
         } finally {
             this.projectDescription.saving = false;
@@ -148,8 +155,7 @@ patch(ProjectTaskControlPanel.prototype, {
 
     discardProjectDescriptionChanges() {
         this.projectDescription.draft = this.projectDescription.original;
-        this.descriptionNeedsSync = true;
-        this.syncDescriptionEditor();
+        this.projectDescription.editorKey++;
     },
 });
 
